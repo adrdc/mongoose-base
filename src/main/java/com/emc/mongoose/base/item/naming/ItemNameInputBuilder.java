@@ -2,7 +2,10 @@ package com.emc.mongoose.base.item.naming;
 
 import com.emc.mongoose.base.config.ConstantValueInputImpl;
 import com.emc.mongoose.base.config.el.CompositeExpressionInputBuilder;
+import com.emc.mongoose.base.item.io.PrefixValueFromFileInputImpl;
 import com.github.akurilov.commons.io.Input;
+
+import java.io.File;
 
 import static com.emc.mongoose.base.item.naming.ItemNameInput.ItemNamingType;
 import static com.emc.mongoose.base.item.naming.ItemNameInput.ItemNamingType.RANDOM;
@@ -62,6 +65,8 @@ public final class ItemNameInputBuilder
 		Input<String> prefixInput;
 		if (prefix == null) {
 			prefixInput = new ConstantValueInputImpl<>("");
+		} else if (new File(prefix).exists()) {
+			prefixInput = new PrefixValueFromFileInputImpl(new File(prefix));
 		} else {
 			prefixInput = CompositeExpressionInputBuilder.newInstance()
 							.expression(prefix)
